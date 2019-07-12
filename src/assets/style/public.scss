@@ -6,7 +6,7 @@ $prefix: d2;
 // 禁止用户选中 鼠标变为手形
 %unable-select {
   user-select: none;
-  cursor: pointer;
+  // cursor: pointer;
 }
 
 // 填满父元素
