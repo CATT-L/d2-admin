@@ -38,10 +38,18 @@ export default {
 					if(item != "") strArr.push(item);
 				});
 
+				// 把路径中的 / 换成 . 当作名字
+				var nameArr = item.router.split("/");
+				var nameStr = [];
+				nameArr.forEach(item => {
+					if(item != "") nameStr.push(item);
+				});
+				nameStr = nameStr.join(".");
 
 				// 补充孩子路由
 				dRouter.children.push({
 					path: item.router,
+					name: nameStr,
 					meta: {
 						title: item.title
 					},

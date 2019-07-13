@@ -36,37 +36,37 @@ let routerFlag = false;
  */
 router.beforeEach((to, from, next) => {
 
+  debug({to, from, next}, "路由拦截钩子")
+
   // 进度条
   NProgress.start()
 
   // 关闭搜索面板
   store.commit('d2admin/search/set', false);
 
-  debug(to);
-  debug(to.matched.some(r => r.meta.withoutAuth));
-
   // 判断登录状态
   const token = util.cookies.get("token");
 
   if(token && token !== "undefined"){
     // 已经登录
-
+    
     // 检查动态路由是否已经加载
     if(! routerFlag){
 
       routerFlag = true;
 
-      debug("页面刷新, 动态路由重新加载");
-
       menuApi.GetMenu().then(data => {
 
         store.commit('custom/menu/menuListSet', data.menuList);
-        
+
         let dRouter = menuApi.ParseRouter(data.menuList);
 
-        debug(dRouter);
-
         router.addRoutes([dRouter]);
+
+        routes.push(dRouter);
+
+        // 更新路由设置
+        store.commit('d2admin/page/init', routes);
         
         // 跳转到指定路由
         next({path: to.path});
@@ -100,10 +100,13 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
+
   // 进度条
   NProgress.done()
+  
   // 多页控制 打开新的页面
   store.dispatch('d2admin/page/open', to)
+  
   // 更改标题
   util.title(to.meta.title)
 })

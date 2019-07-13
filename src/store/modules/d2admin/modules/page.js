@@ -127,6 +127,7 @@ export default {
      * @param {Object} param 从路由钩子的 to 对象上获取 { name, params, query, fullPath } 路由信息
      */
     open ({ state, commit, dispatch }, { name, params, query, fullPath }) {
+
       return new Promise(async resolve => {
         // 已经打开的页面
         let opened = state.opened
@@ -146,6 +147,7 @@ export default {
             fullPath
           })
         } else {
+
           // 页面以前没有打开过
           let page = state.pool.find(t => t.name === name)
           // 如果这里没有找到 page 代表这个路由虽然在框架内 但是不参与标签页显示

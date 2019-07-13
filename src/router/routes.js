@@ -19,7 +19,7 @@ const _import = require('@/libs/util.import.' + process.env.NODE_ENV)
 const frameIn = [
   {
     path: '/',
-    redirect: { path: '/index' },
+    redirect: { name: 'index' },
     component: layoutHeaderAside,
     children: [
       // 系统 前端日志
