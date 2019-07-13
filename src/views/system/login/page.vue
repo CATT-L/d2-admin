@@ -125,6 +125,9 @@
 <script>
 import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
+
+import layoutHeaderAside from '@/layout/header-aside'
+
 export default {
   data () {
     return {

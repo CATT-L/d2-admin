@@ -19,25 +19,15 @@ const _import = require('@/libs/util.import.' + process.env.NODE_ENV)
 const frameIn = [
   {
     path: '/',
-    redirect: { name: 'index' },
+    redirect: { path: '/index' },
     component: layoutHeaderAside,
     children: [
-      // 首页
-      {
-        path: 'index',
-        name: 'index',
-        meta: {
-          auth: true
-        },
-        component: _import('system/index')
-      },
       // 系统 前端日志
       {
         path: 'log',
         name: 'log',
         meta: {
           title: '前端日志',
-          auth: true
         },
         component: _import('system/log')
       },
@@ -46,6 +36,10 @@ const frameIn = [
         path: 'refresh',
         name: 'refresh',
         hidden: true,
+        meta: {
+          title: "正在刷新...",
+          withoutAuth: true,
+        },
         component: _import('system/function/refresh')
       },
       // 页面重定向 必须保留
@@ -53,6 +47,10 @@ const frameIn = [
         path: 'redirect/:route*',
         name: 'redirect',
         hidden: true,
+        meta: {
+          title: "正在跳转...",
+          withoutAuth: true,
+        },
         component: _import('system/function/redirect')
       }
     ]
@@ -76,6 +74,10 @@ const frameOut = [
   {
     path: '/login',
     name: 'login',
+    meta: {
+      title: "登录",
+      withoutAuth: true
+    },
     component: _import('system/login')
   }
 ]
@@ -87,6 +89,9 @@ const errorPage = [
   {
     path: '*',
     name: '404',
+    meta: {
+      title: "找不到页面",
+    },
     component: _import('system/error/404')
   }
 ]

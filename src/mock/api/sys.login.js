@@ -8,7 +8,12 @@ export default [
   {
     path: '/api/login',
     method: 'post',
-    handle ({ body }) {
+    handle (params) {
+
+      let body = params.body;
+
+      debug(params);
+
       const user = userDB.find(e => e.username === body.username && e.password === body.password)
       if (user) {
         return {

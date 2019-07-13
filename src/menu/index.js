@@ -35,7 +35,7 @@ export const menuHeader = [
   {
     path: '/index',
     title: '首页',
-    icon: 'home'
+    icon: 'home',
   },
   {
     title: '功能',
