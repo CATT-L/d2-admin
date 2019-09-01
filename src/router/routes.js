@@ -22,6 +22,16 @@ const frameIn = [
     redirect: { name: 'root' },
     component: layoutHeaderAside,
     children: [
+
+      {
+        path: "system/menu/edit",
+        hidden: true,
+        meta: {
+          title: "菜单设置",
+          withoutAuth: true,
+        },
+        component: _import("custom/system/menu/edit"),
+      },
       // 系统 前端日志
       {
         path: 'log',
