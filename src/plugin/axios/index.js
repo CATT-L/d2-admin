@@ -1,7 +1,11 @@
 import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
-import util from '@/libs/util'
+import util from '@/libs/util';
+
+var CATT   = require("@/catt/index");
+var config = require("@/config");
+
 
 // 创建一个错误
 function errorCreate (msg) {
@@ -41,26 +45,51 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use(
-  config => {
+  request => {
+
     // 在请求发送之前做一些处理
-    const token = util.cookies.get('token')
-    // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['X-Token'] = token
 
-    console.log(config);
 
-    return config
+    // 生成签名
+    var params = {};
+
+    if(request.method == "post"){
+      // post 请求
+      if(request.data) params.data = request.data;
+
+    } else if(request.method == "get"){
+      // get 请求
+      params = request.params;
+    }
+
+    var merchant = config.merchant;
+
+    var sign = CATT.Sign.parse(params, merchant.mch_id, merchant.secret);
+
+    // 将签名参数放在请求头
+    request.headers = {...request.headers, ...sign};
+
+    var bearer = util.cookies.get("bearer");
+
+    if(bearer){
+      request.headers["Authorization"] = "Bearer " + bearer;
+    }
+
+    return request
   },
   error => {
     // 发送失败
     console.log(error)
     Promise.reject(error)
   }
-)
+);
 
 // 响应拦截器
 service.interceptors.response.use(
   response => {
+
+    console.log(response);
+
     // dataAxios 是 axios 返回数据中的 data
     const dataAxios = response.data
     // 这个状态码是和后端约定的

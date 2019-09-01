@@ -45,9 +45,9 @@ router.beforeEach((to, from, next) => {
   store.commit('d2admin/search/set', false);
 
   // 判断登录状态
-  const token = util.cookies.get("token");
+  const bearer = util.cookies.get("bearer");
 
-  if(token && token !== "undefined"){
+  if(bearer && bearer !== "undefined"){
     // 已经登录
     
     // 检查动态路由是否已经加载
@@ -57,9 +57,9 @@ router.beforeEach((to, from, next) => {
 
       menuApi.GetMenu().then(data => {
 
-        store.commit('custom/menu/menuListSet', data.menuList);
+        store.commit('custom/menu/menuListSet', data.menulist);
 
-        let dRouter = menuApi.ParseRouter(data.menuList);
+        let dRouter = menuApi.ParseRouter(data.menulist);
 
         router.addRoutes([dRouter]);
 

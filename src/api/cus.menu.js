@@ -11,7 +11,7 @@ export default {
 	
 	GetMenu: function(){
 		return request({
-			url: '/user/menu',
+			url: '/system/menulist',
 			method: 'post',
 		})
 	},
@@ -30,7 +30,7 @@ export default {
 			if(item.type == TYPE_VIEW){
 
 				// 拼接目录防止出现双斜杠
-				var componentArr = ("custom/" + item.router).split("/");
+				var componentArr = ("custom/" + item.url).split("/");
 
 				var strArr = [];
 
@@ -39,7 +39,7 @@ export default {
 				});
 
 				// 把路径中的 / 换成 . 当作名字
-				var nameArr = item.router.split("/");
+				var nameArr = item.url.split("/");
 				var nameStr = [];
 				nameArr.forEach(item => {
 					if(item != "") nameStr.push(item);
@@ -48,7 +48,7 @@ export default {
 
 				// 补充孩子路由
 				dRouter.children.push({
-					path: item.router,
+					path: item.url,
 					name: nameStr,
 					meta: {
 						title: item.title
@@ -70,7 +70,7 @@ export default {
 
 		menuList.forEach(item => {
 			if(item.aside_shown){
-				item.path = item.router;
+				item.path = item.url;
 				nodes.push(item);
 			}
 		});

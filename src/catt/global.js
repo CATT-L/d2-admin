@@ -2,6 +2,7 @@
 import request from '@/plugin/axios'
 import util from '@/libs/util';
 
+console.log("global");
 
 // 全局函数挂载
 if(typeof window.mount == "undefined"){

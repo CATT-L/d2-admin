@@ -19,7 +19,7 @@ const _import = require('@/libs/util.import.' + process.env.NODE_ENV)
 const frameIn = [
   {
     path: '/',
-    redirect: { name: 'index' },
+    redirect: { name: 'root' },
     component: layoutHeaderAside,
     children: [
       // 系统 前端日志
@@ -70,6 +70,17 @@ const frameIn = [
  * 在主框架之外显示
  */
 const frameOut = [
+
+  // 网站根目录, 我把这一页设置成判断用户是否登录的空白页面
+  {
+    path: "/",
+    name: "root",
+    meta: {
+      title: "",
+      withoutAuth: true
+    },
+    component: _import('custom/checkLogin')
+  },
   // 登录
   {
     path: '/login',

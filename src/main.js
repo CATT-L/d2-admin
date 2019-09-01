@@ -1,5 +1,6 @@
 
-import "./catt";
+import "./catt/global";
+
 
 // Vue
 import Vue from 'vue'
