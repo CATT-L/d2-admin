@@ -16,25 +16,21 @@ function errorCreate (msg) {
 
 // 记录和显示错误
 function errorLog (error) {
+  
   // 添加到日志
-  store.dispatch('d2admin/log/push', {
-    message: '数据请求异常',
-    type: 'danger',
-    meta: {
-      error
-    }
-  })
+  // store.dispatch('d2admin/log/push', {
+  //   message: '数据请求异常',
+  //   type: 'danger',
+  //   meta: {
+  //     error
+  //   }
+  // })
+  
   // 打印到控制台
   if (process.env.NODE_ENV === 'development') {
     util.log.danger('>>>>>> Error >>>>>>')
-    console.log(error)
+    console.log(error.message)
   }
-  // 显示提示
-  Message({
-    message: error.message,
-    type: 'error',
-    duration: 5 * 1000
-  })
 }
 
 // 创建一个 axios 实例
@@ -88,31 +84,33 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
 
-    console.log(response);
-
     // dataAxios 是 axios 返回数据中的 data
     const dataAxios = response.data
+
     // 这个状态码是和后端约定的
     const { code } = dataAxios
     // 根据 code 进行判断
+
     if (code === undefined) {
       // 如果没有 code 代表这不是项目后端开发的接口 比如可能是 D2Admin 请求最新版本
       return dataAxios
+
     } else {
+
       // 有 code 代表这是一个后端接口 可以进行进一步的判断
       switch (code) {
+
         case 0:
           // [ 示例 ] code === 0 代表没有错误
           return dataAxios.data
-        case 'xxx':
-          // [ 示例 ] 其它和后台约定的 code
-          errorCreate(`[ code: xxx ] ${dataAxios.msg}: ${response.config.url}`)
-          break
+
         default:
           // 不是正确的 code
-          errorCreate(`${dataAxios.msg}: ${response.config.url}`)
+          // errorCreate(`${dataAxios.msg}: ${response.config.url}`)
+          errorCreate(`${dataAxios.msg}`)
           break
       }
+
     }
   },
   error => {

@@ -49,16 +49,6 @@
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
                   </el-input>
                 </el-form-item>
-                <el-form-item prop="code">
-                  <el-input
-                    type="text"
-                    v-model="formLogin.code"
-                    :placeholder="$t('views.system.login.form.placeholder.code')">
-                    <template slot="append">
-                      <img class="login-code" src="./image/login-code.png">
-                    </template>
-                  </el-input>
-                </el-form-item>
                 <el-button
                   size="default"
                   @click="submit"
@@ -68,20 +58,16 @@
                 </el-button>
               </el-form>
             </el-card>
-            <p
+            <!-- <p
               class="page-login--options"
               flex="main:justify cross:center">
               <span><d2-icon name="question-circle"/> {{ $t('views.system.login.options.forget-password') }}</span>
               <span>{{ $t('views.system.login.options.register') }}</span>
-            </p>
-            <!-- quick login -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
-              {{ $t('views.system.login.quick-login.toggle-button.text') }}
-            </el-button>
+            </p> -->
           </div>
         </div>
         <div class="page-login--content-footer">
-          <p class="page-login--content-footer-locales">
+          <!-- <p class="page-login--content-footer-locales">
             <a
               v-for="language in $languages"
               :key="language.value"
@@ -89,7 +75,7 @@
               @click="$i18n.locale = language.value">
               {{ language.label }}
             </a>
-          </p>
+          </p> -->
           <p class="page-login--content-footer-copyright">
             {{ $t('views.system.login.footer.copyright.copyright') }}
             <d2-icon name="copyright"/>
@@ -98,11 +84,11 @@
               @{{ $t('views.system.login.footer.copyright.author') }}
             </a>
           </p>
-          <p class="page-login--content-footer-options">
+          <!-- <p class="page-login--content-footer-options">
             <a href="#">{{ $t('views.system.login.footer.button.help') }}</a>
             <a href="#">{{ $t('views.system.login.footer.button.privacy') }}</a>
             <a href="#">{{ $t('views.system.login.footer.button.clause') }}</a>
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
@@ -126,6 +112,7 @@
 import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
 
+import { Message } from 'element-ui';
 import layoutHeaderAside from '@/layout/header-aside'
 
 export default {
@@ -194,6 +181,15 @@ export default {
       }
     }
   },
+
+  created (){
+    this.login()
+    .then(() => {
+      this.$router.push("/index");
+    })
+    .catch(() => {});
+  },
+
   mounted () {
     this.timeInterval = setInterval(() => {
       this.refreshTime()
@@ -224,10 +220,8 @@ export default {
     // 提交登录信息
     submit () {
       this.$refs.loginForm.validate((valid) => {
+
         if (valid) {
-          // 登录
-          // 注意 这里的演示没有传验证码
-          // 具体需要传递的数据请自行修改代码
           var data = {
             username: this.formLogin.username,
             password: this.formLogin.password
@@ -238,10 +232,21 @@ export default {
               // 重定向对象不存在则返回顶层路径
               this.$router.replace(this.$route.query.redirect || '/')
             })
+            .catch(err => {
+
+              // 弹窗提示密码错误
+              Message({
+                message  : err.message,
+                type     : 'error',
+                duration : 3E3,
+              });
+
+            })
         } else {
           // 登录表单校验失败
           this.$message.error(this.$t('public.message.error.form.invalid'))
         }
+
       })
     }
   }

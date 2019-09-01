@@ -1,7 +1,7 @@
 import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
 import router from '@/router'
-import { AccountLogin } from '@api/sys.login'
+import { AccountLogin, AccuntLogout } from '@api/sys.login'
 import i18n from '../../../../i18n'
 
 export default {
@@ -39,7 +39,6 @@ export default {
             resolve()
           })
           .catch(err => {
-            console.log('err: ', err)
             reject(err)
           })
       })
@@ -54,16 +53,23 @@ export default {
        * @description 注销
        */
       async function logout () {
-        // 删除cookie
-        util.cookies.remove('token')
-        util.cookies.remove('uuid')
+
+        // 请求登出接口
+        AccuntLogout().finally(() => {
+          // 删除 cookie
+          util.cookies.remove("bearer");
+        });
+
         // 清空 vuex 用户信息
         await dispatch('d2admin/user/set', {}, { root: true })
+
         // 跳转路由
         router.push({
           name: 'login'
-        })
+        });
+
       }
+
       // 判断是否需要确认
       if (confirm) {
         commit('d2admin/gray/set', true, { root: true })
